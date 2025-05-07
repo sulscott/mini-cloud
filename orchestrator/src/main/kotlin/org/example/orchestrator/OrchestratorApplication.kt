@@ -9,6 +9,12 @@ fun main() {
                 port = 8080
                 replicas = 2
                 env("JWT_SECRET", "abc123")
+
+                mesh {
+                    routes = listOf("/login", "/signup")
+                    retries = 3
+                    retryDelayMs = 200
+                }
             }
 
             service("user") {

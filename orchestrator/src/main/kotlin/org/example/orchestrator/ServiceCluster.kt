@@ -2,19 +2,19 @@ package org.example.orchestrator
 
 @ClusterDsl
 class ClusterBuilder {
-    private val nodes = mutableListOf<NodeBuilder>()
+    private val nodeBuilders = mutableListOf<NodeBuilder>()
 
     // name --> the identifier of the node (i.e. "local", "remote-1", etc.)
     // block --> the DSL body, scoped to a NodeBuilder instance
     fun node(name: String, block: NodeBuilder.() -> Unit) {
         val builder = NodeBuilder(name) // <-- create NodeBuilder instance
         builder.block() // <-- apply the block to it
-        nodes += builder // <-- add it to the nodes list
+        nodeBuilders += builder // <-- add it to the nodes list
     }
 
     // converts the ClusterBuilder into a pure data class - the final model that could be serialized, validated, or turned into YAML/JSON
     // Maps each NodeBuilder to a Node by calling .build
-    fun build(): Cluster = Cluster(nodes.map { it.build() })
+    fun build(): Cluster = Cluster(nodeBuilders.map { it.build() })
 }
 
 @ClusterDsl
