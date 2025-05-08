@@ -1,6 +1,8 @@
 version: '3.8'
 services:
   auth:
+    build:
+      context: ../../auth-service
     image: auth-service:latest
     ports:
       - "8080:8080"
@@ -8,9 +10,37 @@ services:
       JWT_SECRET: "abc123"
 
   user:
+    build:
+      context: ../../user-service
     image: user-service:latest
     ports:
-      - "8081:8081"
+      - "8081:8080"
     depends_on:
       - auth
+
+  document:
+    build:
+      context: ../../document-service
+    image: document-service:latest
+    ports:
+      - "8082:8080"
+    depends_on:
+      - user
+
+  approval:
+    build:
+      context: ../../approval-service
+    image: approval-service:latest
+    ports:
+      - "8083:8080"
+    depends_on:
+      - document
+      - user
+
+  notification:
+    build:
+      context: ../../notification-service
+    image: notification-service:latest
+    ports:
+      - "8084:8080"
 

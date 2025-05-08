@@ -25,10 +25,42 @@ data class Node(
     val services: List<Service>
 )
 
+/**
+ * Represents a single microservice within a node.
+ * Includes its name, port, replica count, communication protocol (e.g. "http" or "grpc"),
+ * environment variables, service dependencies, and optional mesh-specific configuration.
+ */
 data class Service(
     val name: String,
     val port: Int,
     val replicas: Int,
+    val protocol: String,
     val env: Map<String, String>,
-    val dependsOn: List<String>
+    val dependsOn: List<String>,
+    val mesh: Mesh?
+)
+
+/**
+ * Defines optional service mesh-specific configuration for a given service.
+ * This includes retry behavior, timeout policies, rate limiting, authentication requirements,
+ * and routing logic (e.g. for path-based routing or traffic splitting).
+ * Services without mesh config are treated as opt-out of the mesh.
+ */
+data class Mesh(
+    val retries: Int = 1,
+    val timeoutMs: Int = 1000,
+    val rateLimitPerSecond: Int = 100,
+    val authRequired: Boolean = false,
+    val routes: List<Route> = emptyList()
+)
+
+/**
+ * Defines a single route entry for a mesh-enabled service.
+ * Each route can map a path prefix to a target service, optionally using traffic weights
+ * to support features like A/B testing or staged rollouts.
+ */
+data class Route(
+    val path: String,
+    val target: String,
+    val weight: Int = 100
 )

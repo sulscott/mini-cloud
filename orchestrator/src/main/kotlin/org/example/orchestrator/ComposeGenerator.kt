@@ -1,13 +1,6 @@
 package org.example.orchestrator
 
-/**
- * Extension function on StringBuilder to append an indented line.
- * @param level Number of indentation levels (2 spaces per level)
- * @param line The line of text to append
- */
-fun StringBuilder.indent(level: Int, line: String) {
-    appendLine("  ".repeat(level) + line)
-}
+import org.example.orchestrator.utilities.indent
 
 /**
  * Converts a Cluster model into a Docker Compose YAML string.

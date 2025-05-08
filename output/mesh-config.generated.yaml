@@ -1,0 +1,33 @@
+services:
+  auth:
+    port: 8080
+    retries: 3
+    timeoutMs: 2000
+    rateLimitPerSecond: 500
+    authRequired: true
+    routes:
+      - path: "/v1"
+        target: "auth-v1"
+        weight: 100
+
+  user:
+    port: 8081
+    retries: 1
+    timeoutMs: 1000
+    rateLimitPerSecond: 100
+    authRequired: true
+
+  notification:
+    port: 8084
+    retries: 1
+    timeoutMs: 1000
+    rateLimitPerSecond: 10
+    authRequired: false
+    routes:
+      - path: "/v1"
+        target: "notification-v1"
+        weight: 80
+      - path: "/v2"
+        target: "notification-v2"
+        weight: 20
+
